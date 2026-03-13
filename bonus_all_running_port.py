@@ -25,15 +25,19 @@ Libraries:
 
 import psutil
 from tabulate import tabulate
-
+import socket
 rows = []
 
 for conn in psutil.net_connections():
 
     # Detect protocol
     protocol = "TCP"
-    if conn.type == psutil.SOCK_DGRAM:
+    if conn.type == socket.SOCK_STREAM:
+        protocol = "TCP"
+    elif conn.type == socket.SOCK_DGRAM:
         protocol = "UDP"
+    else:
+        protocol = "OTHER"
 
     # Local address
     local_ip = ""
